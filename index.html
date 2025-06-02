@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengumuman Kelulusan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Product+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Product Sans', sans-serif;
+      background: linear-gradient(to right, #000428, #004e92);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    input {
+      padding: 10px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      width: 300px;
+      margin-bottom: 1em;
+    }
+    .result {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+    }
+    .not-found {
+      color: #ff7272;
+    }
+    /* Add this new CSS rule for the success message */
+    .success-message {
+      color: #4CAF50; /* A nice shade of green */
+    }
+  </style>
+</head>
+<body>
+  <h1>Pengumuman Kelulusan</h1>
+  <input type="text" id="search" placeholder="Masukkan nama atau NISN..." oninput="searchStudent()" />
+  <div id="result" class="result"></div>
+
+  <script>
+    const students = [
+      { nama: "AISHA SAKHIRA", nisn: "3139738938", ttl: "BUKITTINGGI, 10 April 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NASYWAH AQILA HUMAIRA", nisn: "3138155970", ttl: "Pariaman, 29 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "HAZIQ ISRA AL GANIY", nisn: "3136036317", ttl: "PAYAKUMBUH, 06 Juni 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AKYLA FLORETA", nisn: "3133659509", ttl: "Batam, 05 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "JIHAN KHANSA SALSABILA", nisn: "3133212933", ttl: "Baso, 23 September 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ZEEVANO BERLIAN VINNORA", nisn: "3132323033", ttl: "BUKITTINGGI, 22 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD HARUN ARRASYID", nisn: "3128745205", ttl: "DELI SERDANG, 28 Agustus 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD ALIF AL FIKRI", nisn: "3127056070", ttl: "BUKITTINGGI, 03 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "BINTANG BRAVA MAGASTARA", nisn: "3126723764", ttl: "BUKITTINGGI, 14 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "VANIA DIVA ZULVIAN", nisn: "3126010013", ttl: "SANGATTA, 26 Agustus 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RICHARD ABRAHAM EINSTEIN", nisn: "3125312432", ttl: "BUKITTINGGI, 30 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ASHYKA ZAHRA", nisn: "3123774346", ttl: "BUKITTINGGI, 11 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD AGUAN HAMAS MASRI", nisn: "3123031293", ttl: "PADANG LUA, 11 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD RIZKY RAMADHAN", nisn: "3123021474", ttl: "Bukittinggi, 03 Agustus 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "KAVIN AL GHYFARI", nisn: "3122872603", ttl: "BUKITTINGGI, 07 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "JIHAN SYAFWA RAYHANA", nisn: "3122489968", ttl: "BUKITTINGGI, 22 Mei 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "HAURA AZIZIA MAULANA", nisn: "3121786204", ttl: "BUKITTINGGI, 11 April 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RAQILLA MAHRAN HAKIM", nisn: "3121457439", ttl: "Bandung,  08 Juli 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AFIKA ZAKELTI", nisn: "3120929547", ttl: "BUKITTINGGI, 05 Juni 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AFIQA ODELIA PUTRI", nisn: "141419237", ttl: "BUKITTINGGI, 03 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "SYARIFAH HASINA", nisn: "139368432", ttl: "BUKITTINGGI, 20 Mei 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ASYIFA KANZA AURORA", nisn: "138986261", ttl: "Bukittinggi, 15 Mei 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMAD YAZID AULIA", nisn: "138067967", ttl: "BUKITTINGGI, 03 Januari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "FAIZ HABIBI AHMAD", nisn: "137955549", ttl: "BUKITTINGGI, 22 April 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "SHAQILLA KHAIRINISWA JUNAIDI", nisn: "137578087", ttl: "BUKITTINGGI, 28 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "SALSABILA NADIVA", nisn: "136745588", ttl: "BUKITTINGGI, 18 Mei 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AZZIRA REVI GADIZA", nisn: "136340531", ttl: "BUKITTINGGI, 19 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "KAYLA ERA PUTRI", nisn: "136029628", ttl: "BUKITTINGGI, 23 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "FATHIA PUTRI ANJANI", nisn: "135976363", ttl: "Bukittinggi, 21 April 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "LIYANA ZAHIRAH", nisn: "135928068", ttl: "BUKITTINGGI, 19 Februari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "SYAKIRA NAYURA BESTARI", nisn: "135670914", ttl: "Bukittinggi, 16 Agustus 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ALIF AL HABSI", nisn: "135366882", ttl: "BUKITTINGGI, 11 April 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RAISHA NURI AQILA", nisn: "135156924", ttl: "BUKITTINGGI, 31 Januari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "SALSABILLA FIRSTNATHA OSMOND", nisn: "134713405", ttl: "BUKITTINGGI, 30 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MEYLANI ZAHRA SALSABILA", nisn: "134683145", ttl: "BUKITTINGGI, 28 Mei 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ADIBA KIRANA", nisn: "133732716", ttl: "Bukittinggi, 16 Juni 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ZAKHIRA ASHADIYA", nisn: "133722572", ttl: "Bukittinggi, 23 Januari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RAZQA NURIL ARRANSHA", nisn: "133703553", ttl: "BUKITTINGGI, 31 Januari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NAYLAN HAMDA SHAKIA", nisn: "133662106", ttl: "Bukittinggi, 09 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ALEESA AMRA", nisn: "133495217", ttl: "BUKITTINGGI, 12 Februari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "GIESKA MOELABOETI DINEPEN", nisn: "132972957", ttl: "PADANG, 13 Januari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD ADLY PASHA", nisn: "132704815", ttl: "BUKITTINGGI, 09 Januari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RASYID AL HAMID", nisn: "132603635", ttl: "Bukittinggi, 20 Februari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ALLESHA FLORENCE SHASHIKIRANA", nisn: "132367667", ttl: "BUKITTINGGI, 23 Februari 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "KHANZA RESKYTHA FAUZIAH", nisn: "131889269", ttl: "BUKITTINGGI, 05 April 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD RIZKY", nisn: "131332730", ttl: "Bengkulu, 12 Maret 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MARSHYAHALUM AR RAZI", nisn: "129910119", ttl: "BUKITTINGGI, 20 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "GALIB AHMAD FIRDAUS", nisn: "129217362", ttl: "Bukittinggi, 20 Juni 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "TIANRO PRADIPTA ALVARO", nisn: "129170550", ttl: "Bukittinggi, 08 Agustus 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RADIV SHAKIL ALFAYHES", nisn: "129030484", ttl: "KAYU PASAK, 08 Agustus 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AHMAD BIRRAL GIBRAN", nisn: "128740007", ttl: "BUKITTINGGI, 28 September 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NAYLA RADDHATUL HUSNA", nisn: "128668995", ttl: "Bukittinggi, 22 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AGHATHA TSAQIB AURUMIBY", nisn: "128542060", ttl: "Bukittinggi, 31 Mei 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ZAHIRA FAIRUZ HAFZI", nisn: "128138009", ttl: "BUKITTINGGI, 26 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NHARU ATHA SABILL", nisn: "127543216", ttl: "BUKITTINGGI, 26 April 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NAJWA ELKHAERA", nisn: "127215206", ttl: "Bukittinggi, 09 Juli 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "LUT KEYSYA NATASYA PUTRI", nisn: "127020433", ttl: "Bukittinggi, 20 Agustus 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ARDELL AZKA ALFARIZQY", nisn: "126849616", ttl: "BUKITTINGGI, 04 Mei 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD BAYU SAPUTRA", nisn: "126759259", ttl: "BUKITTINGGI, 22 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MEISYA NABILLA", nisn: "126323142", ttl: "BUKITTINGGI, 28 Mei 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AL FATHIER SATRIA FIRDAOES", nisn: "126195175", ttl: "BATAM, 26 September 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AFIF KHALAF FAITH", nisn: "126032765", ttl: "Bukittinggi, 18 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RAESYA AURELIA RAMADHANI", nisn: "125977501", ttl: "Bukittinggi, 22 Juli 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "REYSA FITRIA OKTY", nisn: "125813572", ttl: "BUKITTINGGI, 09 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ZHIYA KHAIRIN NISWA", nisn: "125614656", ttl: "BUKITTINGGI, 24  November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NADHIRA JIHAN RINDYNA", nisn: "125302379", ttl: "BUKITTINGGI, 17 September 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MADU AFIKHA", nisn: "125189852", ttl: "Bukittinggi, 17 Juni 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "NAFRAN FAIRUS", nisn: "125139452", ttl: "Bukittinggi, 26 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "DHIYA KHANSA HUMAIRA", nisn: "124549411", ttl: "BUKITTINGGI, 13 September 2013", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "PRIMEVA RAFA MAULANA", nisn: "123992333", ttl: "BUKITTINGGI, 11 Juli 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "PUTRI SYAHLA DJATMIKO", nisn: "123698747", ttl: "Bukittinggi, 17 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RAHMI AMIRAH", nisn: "123380581", ttl: "BUKITTINGGI, 20 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "RACHEL AURELLYA", nisn: "123362644", ttl: "LADANG LAWEH, 20 Juni 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "QAID BARRA EL ABRAR", nisn: "123346556", ttl: "Bukittinggi, 29 November 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "ADHITYA ULHAQ", nisn: "123005399", ttl: "Bukittinggi, 16 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "EMILY NURA AIZA", nisn: "122761912", ttl: "JAKARTA, 16 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "LAIKA AKWA UFAIRAH", nisn: "122318079", ttl: "SOLOK, 29 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "KHAIRA DANISY", nisn: "122283078", ttl: "Bukittinggi, 22 Desember 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "FELYRA KEISHA", nisn: "121926244", ttl: "Bukittinggi, 09 Juni 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "MUHAMMAD ZAKKY", nisn: "121557815", ttl: "JAMBAK, 17 Oktober 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "HUMAIRA LATHIFA JASMINE", nisn: "121330928", ttl: "Bukittinggi, 08 Mei 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "SUCI LUTFHI MAHAR", nisn: "121278113", ttl: "Bukittinggi, 04 Juli 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "AFIQA PUTRI HAMERU", nisn: "121238547", ttl: "BUKITTINGGI, 15 Juli 2012", ket: "SELAMAT ANDA LULUS !" },
+      { nama: "FAJAR ALHADID", nisn: "118858406", ttl: "Bukittinggi, 02 Oktober 2011", ket: "SELAMAT ANDA LULUS !" }
+    ];
+
+    function searchStudent() {
+      const input = document.getElementById('search').value.toLowerCase();
+      const resultDiv = document.getElementById('result');
+      const found = students.find(s =>
+        s.nama.toLowerCase().includes(input) ||
+        s.nisn.includes(input)
+      );
+      if (input === "") {
+        resultDiv.innerHTML = "";
+      } else if (found) {
+        // Add the 'success-message' class to the <h3> tag
+        resultDiv.innerHTML = `
+          <h2>${found.nama}</h2>
+          <p>NISN: ${found.nisn}</p>
+          <p>TTL: ${found.ttl}</p>
+          <h3 class='success-message'>${found.ket}</h3>
+        `;
+      } else {
+        resultDiv.innerHTML = `<p class='not-found'>Data tidak ditemukan.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
